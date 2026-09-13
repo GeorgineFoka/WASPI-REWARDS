@@ -1,0 +1,60 @@
+// ==========================================
+// WASPI REWARDS - VARIABLES SCSS
+// ==========================================
+
+// --- Typographie ---
+$font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !default;
+
+// --- Couleurs Principales & Neutres ---
+$primary: #4f46e5 !default;
+$primary-hover: #4338ca !default;
+
+$bg-light: #f9fafb !default;
+$bg-card: #ffffff !default;
+
+$border-color: #e5e7eb !default;
+$border-focus: #3b82f6 !default;
+
+$text-dark: #1f2937 !default;
+$text-body: #374151 !default;
+$text-muted: #6b7280 !default;
+
+// --- Notifications & États ---
+$success-color: #10b981 !default;
+$success-bg: #ecfdf5 !default;
+
+$error-color: #ef4444 !default;
+$error-bg: #fef2f2 !default;
+
+// --- Couleurs des Badges ---
+// Beginner Badge (Bleu clair)
+$badge-beginner-bg: #e0f2fe !default;
+$badge-beginner-color: #0369a1 !default;
+
+// Beginner / Base Badge (Ambre clair)
+$badge-base-bg: #fef3c7 !default;
+$badge-base-color: #92400e !default;
+
+// Top Fan Badge (Jaune)
+$badge-top-bg: #fef08a !default;
+$badge-top-color: #854d0e !default;
+
+// Super Fan Badge (Violet)
+$badge-super-bg: #f3e8ff !default;
+$badge-super-color: #6b21a8 !default;
+
+// --- Layout, Ombres & Transitions ---
+$radius-sm: 4px !default;
+$radius-md: 6px !default;
+$radius-lg: 8px !default;
+$radius-xl: 12px !default;
+$radius-full: 9999px !default;
+
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !default;
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !default;
+$shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !default;
+
+$transition-base: all 0.2s ease-in-out !default;
+
+$z-modal: 1000 !default;
+$z-toast: 9999 !default;
