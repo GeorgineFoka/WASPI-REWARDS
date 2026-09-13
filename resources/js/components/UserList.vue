@@ -1,9 +1,9 @@
 <template>
-  <div class="max-w-5xl mx-auto p-6 bg-slate-50 min-h-screen space-y-8">
+  <div class="max-w-5xl mx-auto p-4 sm:p-6 bg-slate-50 min-h-screen space-y-8">
     <!-- Header -->
     <header>
-      <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">🏆 WASPI REWARDS</h1>
-      <p class="text-slate-500 mt-1">User management, points, badges, and activity feed</p>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight">🏆 WASPI REWARDS</h1>
+      <p class="text-slate-500 mt-1 text-sm sm:text-base">User management, points, badges, and activity feed</p>
     </header>
 
     <!-- Alert Modal (Success / Error) -->
@@ -33,12 +33,12 @@
     </div>
 
     <!-- Filter Bar & General Actions -->
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-wrap gap-4 items-center justify-between">
-      <div class="flex flex-wrap gap-3 items-center w-full md:w-auto">
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-4 items-center justify-between">
+      <div class="flex flex-col sm:flex-row gap-3 items-center w-full sm:w-auto">
         <select 
           v-model="selectedBadge" 
           @change="fetchUsers" 
-          class="bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5 outline-none transition"
+          class="bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5 outline-none transition w-full sm:w-auto"
         >
           <option value="">All Badges</option>
           <option value="aucun">No Badge</option>
@@ -53,35 +53,36 @@
           v-model="minPoints" 
           @input="handlePointsInput" 
           placeholder="Min points e.g.: 100" 
-          class="bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5 outline-none transition w-52"
+          class="bg-slate-50 border border-slate-300 text-slate-700 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 p-2.5 outline-none transition w-full sm:w-52"
         />
       </div>
 
-      <div class="flex items-center gap-3">
+      <div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
         <button 
           @click="showCommentsListModal = true" 
-          class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs rounded-lg transition shadow-sm cursor-pointer flex items-center gap-1.5"
+          class="w-full sm:w-auto px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs rounded-lg transition shadow-sm cursor-pointer flex items-center justify-center gap-1.5"
         >
           <span>📜</span> Comments List
         </button>
 
         <button 
           @click="openCommentModalForUser(null)" 
-          class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs rounded-lg transition shadow-sm cursor-pointer flex items-center gap-1.5"
+          class="w-full sm:w-auto px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs rounded-lg transition shadow-sm cursor-pointer flex items-center justify-center gap-1.5"
         >
           <span>💬</span> New Message
         </button>
       </div>
     </div>
 
-    <!-- Users Table -->
+    <!-- Users Section (Responsive Cards on Mobile / Table on Desktop) -->
     <section>
       <div v-if="loadingUsers" class="flex justify-center items-center py-12">
         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
         <span class="ml-3 text-slate-600 font-medium">Loading users...</span>
       </div>
 
-      <div v-else-if="users.length" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <!-- Mode Desktop : Tableau classique (caché sur mobile) -->
+      <div v-else-if="users.length" class="hidden md:block bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-slate-100/80 text-slate-600 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
@@ -129,7 +130,52 @@
         </table>
       </div>
 
-      <div v-else class="text-center py-12 bg-white rounded-xl border border-slate-200 shadow-sm">
+      <!-- Mode Mobile : Cartes empilées verticalement (caché sur bureau) -->
+      <div v-if="!loadingUsers && users.length" class="md:hidden space-y-4">
+        <div v-for="user in users" :key="user.id" class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block">User</span>
+              <span class="font-bold text-slate-900 text-base">{{ user.name }}</span>
+            </div>
+            <div>
+              <span class="inline-block px-2.5 py-1 bg-emerald-50 text-emerald-700 font-bold rounded-md border border-emerald-200 text-sm">
+                {{ user.points }} pts
+              </span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-sm">
+            <div>
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Current Badge</span>
+              <span :class="['inline-block px-2.5 py-0.5 rounded-full text-xs font-medium border', getBadgeStyle(user.current_badge)]">
+                {{ formatBadge(user.current_badge) }}
+              </span>
+            </div>
+            <div>
+              <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">Next Step</span>
+              <template v-if="user.next_badge_info && user.next_badge_info.next_badge && user.next_badge_info.next_badge !== 'Niveau Max' && user.next_badge_info.next_badge !== 'Max Level'">
+                <span class="text-xs font-medium text-slate-800 block">{{ formatBadge(user.next_badge_info.next_badge) }}</span>
+                <span class="text-[11px] text-slate-400">({{ user.next_badge_info.points_needed }} pts needed)</span>
+              </template>
+              <template v-else>
+                <span class="text-xs text-emerald-600 font-semibold">Max level reached</span>
+              </template>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex justify-end">
+            <button 
+              @click="openRewardModal(user)" 
+              class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs rounded-lg transition shadow-sm cursor-pointer text-center"
+            >
+              Credit Points
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="!loadingUsers" class="text-center py-12 bg-white rounded-xl border border-slate-200 shadow-sm">
         <p class="text-slate-400">No users match these criteria.</p>
       </div>
     </section>
@@ -465,7 +511,6 @@ const toggleLike = async (comment) => {
 
   try {
     if (isAlreadyLiked) {
-      // Fix: passed user_id in params for DELETE request to ensure Laravel backend compatibility
       await axios.delete(`/api/comments/${comment.id}/like`, {
         params: { 
           access_token: ACCESS_TOKEN,
@@ -534,7 +579,7 @@ const handlePointsInput = () => {
   clearTimeout(debounceTimeout);
   debounceTimeout = setTimeout(() => {
     fetchUsers();
-  }, 400);
+    }, 400);
 };
 
 onMounted(() => {
