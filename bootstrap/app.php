@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -12,6 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Indispensable sur Railway pour faire confiance au proxy et générer du HTTPS
+        $middleware->trustProxies(at: '*');
+
         // Applique le middleware CORS natif sur toutes les routes API
         $middleware->api(append: [
             \Illuminate\Http\Middleware\HandleCors::class,
