@@ -1,59 +1,165 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# WASPI REWARDS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A reward management system for points, badges, and activity feeds, developed as part of the **Waspito Full Stack Technical Test**.
 
-## About Laravel
+* **GitHub Repository:** https://github.com/GeorgineFoka/WASPI-REWARDS
+* **Live Demo:** https://waspi-rewards-production.up.railway.app
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Back-end:** PHP 8+ & Laravel
+* **Front-end:** Vue.js 3 (Composition API), Tailwind CSS & SCSS
+* **Database:** PostgreSQL / MySQL
+* **API:** RESTful API
+* **Authentication:** Access-token based API authentication
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## ✨ Features & Business Rules
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The application rewards users based on their interactions, such as comments and likes. Points and badges are assigned according to predefined milestones.
 
-## Laravel Sponsors
+### 🏆 Badge System
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Badge              | Requirement         |    Points |
+| ------------------ | ------------------- | --------: |
+| **Beginner Badge** | First comment       |    50 pts |
+| **Beginner**       | 10 likes or more    |   500 pts |
+| **Top Fan**        | 30 comments or more | 2,500 pts |
+| **Super Fan**      | 50 comments or more | 5,000 pts |
 
-### Premium Partners
+### Implemented Features
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+* **User Management:** Display of users, points, current badge, and dynamic calculation of the next badge milestone through `next_badge_info`.
+* **Comments:** Add comments through an interactive modal.
+* **Comment Deletion:** Delete comments as an additional feature.
+* **Likes:** Like and unlike comments dynamically as an additional feature.
+* **Advanced Filters:** Filter users by badge type and minimum points threshold.
+* **Debounced Filtering:** Prevent unnecessary API requests while filtering.
+* **Responsive UI:** Mobile-friendly card layout and desktop table layout.
+* **API:** REST API for retrieving user reward information.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🔌 API Endpoints
 
-## Code of Conduct
+The API requires a valid access token.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Get Users
 
-## Security Vulnerabilities
+**`GET /api/users`**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### Query Parameters
 
-## License
+| Parameter      | Required | Description                                      |
+| -------------- | -------- | ------------------------------------------------ |
+| `access_token` | Yes      | API access token                                 |
+| `type`         | No       | Filter by badge type, e.g. `beginner`, `top-fan` |
+| `points`       | No       | Filter by minimum points                         |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Example
+
+```http
+GET /api/users?access_token=waspi_secret_token_2026&type=top-fan&points=500
+```
+
+#### Response
+
+Returns a JSON response containing the list of users, their points, current badge, and information about their next badge milestone.
+
+---
+
+## 🛠️ Installation and Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/GeorgineFoka/WASPI-REWARDS.git
+cd WASPI-REWARDS
+```
+
+### 2. Install Back-end Dependencies
+
+```bash
+composer install
+```
+
+### 3. Configure Laravel
+
+Create your environment file:
+
+```bash
+cp .env.example .env
+```
+
+Generate the application key:
+
+```bash
+php artisan key:generate
+```
+
+Configure your database credentials in `.env`, then run:
+
+```bash
+php artisan migrate --seed
+```
+
+### 4. Start the Laravel Development Server
+
+```bash
+php artisan serve
+```
+
+The API will be available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+### 5. Install Front-end Dependencies
+
+From the front-end directory:
+
+```bash
+npm install
+```
+
+### 6. Start the Front-end Development Server
+
+```bash
+npm run dev
+```
+
+---
+
+## 🧪 Tests
+
+Run the automated test suite to validate the application's business rules, badge assignments, point calculations, and API endpoints:
+
+```bash
+php artisan test
+```
+
+---
+
+## 📌 Project Structure
+
+The project is organized into separate back-end and front-end components:
+
+* **Laravel:** API, business logic, models, database, and automated tests.
+* **Vue.js:** User interface and interactive features.
+* **Tailwind CSS / SCSS:** Responsive and customized styling.
+
+---
+
+## 🚀 Live Demo
+
+The deployed application is available here:
+
+https://waspi-rewards-production.up.railway.app
+
+The project can also be reviewed through the GitHub repository:
+
+https://github.com/GeorgineFoka/WASPI-REWARDS
