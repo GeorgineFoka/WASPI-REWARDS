@@ -6,9 +6,7 @@ use App\Models\User;
 
 class RewardService
 {
-    /**
-     * Paliers officiels demandés par WASPITO (du plus grand au plus petit).
-     */
+    
     protected const BADGE_HIERARCHY = [
         ['name' => 'super-fan',      'min_points' => 5000],
         ['name' => 'top-fan',        'min_points' => 2500],

@@ -4,11 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\RewardController;
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes - WASPI REWARDS
-|--------------------------------------------------------------------------
-*/
+
 
 // Tableau de bord et gestion des utilisateurs
 Route::get('/users', [RewardController::class, 'index']);
