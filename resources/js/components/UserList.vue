@@ -11,7 +11,6 @@
       <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl border border-slate-100 text-center space-y-4">
         <div class="text-4xl">
           <span v-if="alertModal.type === 'error'">⚠️</span>
-          
         </div>
 
         <h3 class="text-lg font-bold" :class="alertModal.type === 'error' ? 'text-red-600' : 'text-emerald-600'">
@@ -466,9 +465,12 @@ const toggleLike = async (comment) => {
 
   try {
     if (isAlreadyLiked) {
+      // Fix: passed user_id in params for DELETE request to ensure Laravel backend compatibility
       await axios.delete(`/api/comments/${comment.id}/like`, {
-        params: { access_token: ACCESS_TOKEN },
-        data: { user_id: activeLikerId.value, comment_id: comment.id }
+        params: { 
+          access_token: ACCESS_TOKEN,
+          user_id: activeLikerId.value 
+        }
       });
     } else {
       await axios.post(`/api/comments/${comment.id}/like`, {

@@ -239,9 +239,10 @@ const submitLike = async () => {
 
   submitting.value = true;
   try {
+    // Remplacement de l'ID statique par une structure plus souple ou dynamique si requis par l'API
     await api.post('/api/likes', {
       user_id: activeUser.value.id,
-      comment_id: 1
+      comment_id: activeUser.value.last_comment_id || 1 
     });
 
     await fetchUsers();
